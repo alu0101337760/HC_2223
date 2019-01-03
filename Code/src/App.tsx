@@ -2,15 +2,14 @@ import React, { Component } from "react";
 import "./App.scss";
 import Graph from "react-graph-vis";
 import SubmittableTextarea from "./components/SubmittableTextarea";
+import {
+  IVertexCoverInstance,
+  vertexCoverInstanceParser
+} from "./lib/vertexCoverInstanceParser";
+import { IEdge } from "./lib/Edges";
 
 interface INode {
   id: number;
-  label: string;
-}
-
-interface IEdge {
-  from: number;
-  to: number;
 }
 
 interface IGraph {
@@ -18,23 +17,12 @@ interface IGraph {
   edges: IEdge[];
 }
 
-const graph = {
-  nodes: [
-    { id: 1, group: "g1", label: "Node 1", x: 0, y: 0 },
-    { id: 2, group: "g1", label: "Node 2", x: 0, y: 100 },
-    { id: 3, group: "g1", label: "Node 3", x: 100, y: 0 },
-    { id: 4, group: "g1", label: "Node 4", x: 100, y: 100 },
-    { id: 5, group: "g1", label: "Node 5", x: 250, y: 250 }
-  ],
-  edges: [
-    { from: 1, to: 2 },
-    { from: 1, to: 3 },
-    { from: 2, to: 4 },
-    { from: 2, to: 5 }
-  ]
+const exampleGraph = {
+  nodes: [{ id: 1, label: "1" }, { id: 2, label: "2" }, { id: 3, label: "3" }],
+  edges: [{ from: 1, to: 2 }, { from: 2, to: 3 }, { from: 1, to: 3 }]
 };
 
-const options = {
+const vertexCoverGraphOptions = {
   layout: {
     hierarchical: false
   },
@@ -46,25 +34,39 @@ const options = {
       }
     }
   },
-  groups: {
-    g1: { color: { background: "red" } }
-  },
   physics: {
     enabled: false
   }
 };
 
-const events = {
-  select: function(event: IGraph) {
-    const { nodes, edges } = event;
-    console.log({ nodes, edges });
-  }
-};
+function graphFromVertexCoverInstance(instance: IVertexCoverInstance): IGraph {
+  return {
+    nodes: [...instance.nodes].map(id => ({ id, label: "" + id })),
+    edges: [...instance.edges.set]
+  };
+}
 
-class App extends Component {
+interface State {
+  vertexCoverGraphs: IGraph[];
+}
+
+class App extends Component<{}, State> {
+  state: State = {
+    vertexCoverGraphs: [exampleGraph]
+  };
+
   onNewProblemInstance = (value: string): boolean => {
-    console.log({ value });
-
+    try {
+      const newInstance = vertexCoverInstanceParser(value);
+      console.log({ value, newInstance });
+      this.setState(prevState => ({
+        vertexCoverGraphs: prevState.vertexCoverGraphs.concat([
+          graphFromVertexCoverInstance(newInstance)
+        ])
+      }));
+    } catch (error) {
+      console.error(error);
+    }
     return false;
   };
 
@@ -72,26 +74,19 @@ class App extends Component {
     return (
       <div className="container">
         <SubmittableTextarea onSubmit={this.onNewProblemInstance} />
-        <div style={{ height: "80vh", display: "flex" }}>
-          <div
-            style={{
-              width: "100%",
-              height: "100%",
-              border: "1px solid black"
-            }}
-          >
-            <Graph graph={graph} options={options} events={events} />
+        {this.state.vertexCoverGraphs.map((graph, index) => (
+          <div key={index} style={{ height: "80vh", display: "flex" }}>
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                border: "1px solid black"
+              }}
+            >
+              <Graph graph={graph} options={vertexCoverGraphOptions} />
+            </div>
           </div>
-          <div
-            style={{
-              width: "100%",
-              height: "100%",
-              border: "1px solid black"
-            }}
-          >
-            <Graph graph={graph} options={options} events={events} />
-          </div>
-        </div>
+        ))}
       </div>
     );
   }
