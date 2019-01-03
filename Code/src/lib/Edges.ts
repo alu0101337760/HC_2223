@@ -33,7 +33,10 @@ export class Edges {
   /** Adds the given undirected edge */
   public add(from: number, to: number) {
     this._addSingleEdge(from, to);
-    this._addSingleEdge(to, from);
+
+    if (from !== to) {
+      this._addSingleEdge(to, from);
+    }
 
     this.set.add({ from, to });
   }
