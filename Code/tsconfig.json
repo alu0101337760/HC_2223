@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "lib": ["es2016", "dom"],
+    "downlevelIteration": true,
     "allowJs": true,
     "skipLibCheck": false,
     "esModuleInterop": true,
