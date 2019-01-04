@@ -1,11 +1,11 @@
-import { Edges } from "./Edges";
+import { IEdge, Edges } from "./Edges";
 
 // TODO: Create better classes for errors
 
 export interface IVertexCoverInstance {
   coverSize: number;
-  nodes: Set<number>;
-  edges: Edges;
+  nodes: Set<string>;
+  edges: IEdge[];
 }
 
 const LINES_SEPARATOR = "\n";
@@ -33,7 +33,7 @@ export function vertexCoverInstanceParser(
 
   // Check that all edges are from valid nodes to valid nodes
   let invalidNode = null;
-  for (const [from, to] of edges) {
+  for (const { from, to } of edges) {
     if (!nodes.has(from)) {
       invalidNode = from;
     } else if (!nodes.has(to)) {
@@ -59,15 +59,13 @@ export function vertexCoverInstanceParser(
   return { coverSize, nodes, edges };
 }
 
-export function parseNodes(nodesRepr: string): Set<number> {
-  const nodesReprs = nodesRepr
-    .split(ELEMENTS_SEPARATOR)
-    .map(str => parseInt(str.trim()));
+export function parseNodes(nodesRepr: string): Set<string> {
+  const nodesReprs = nodesRepr.split(ELEMENTS_SEPARATOR).map(str => str.trim());
 
   return new Set(nodesReprs);
 }
 
-export function parseEdges(verticesRepr: string[]): Edges {
+export function parseEdges(verticesRepr: string[]): IEdge[] {
   const edges = new Edges();
 
   for (const vertexRepr of verticesRepr) {
@@ -79,19 +77,11 @@ export function parseEdges(verticesRepr: string[]): Edges {
       );
     }
 
-    let from = parseInt(vertexElements[0].trim());
-    let to = parseInt(vertexElements[1].trim());
-
-    if (isNaN(from) || isNaN(to)) {
-      throw new Error(
-        `Unable to parse nodes as integers in vertex "${vertexRepr}"`
-      );
-    }
-
-    edges.add(from, to);
+    const [from, to] = vertexElements;
+    edges.add(from.trim(), to.trim());
   }
 
-  return edges;
+  return [...edges.list];
 }
 
 export function parseCoverSize(coverSizeRepr: string) {

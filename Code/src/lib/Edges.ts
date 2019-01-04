@@ -1,23 +1,23 @@
 export class DuplicateEdgeError extends Error {
-  constructor(public from: number, public to: number) {
+  constructor(public from: string, public to: string) {
     super(`Duplicate edge ${from} - ${to}`);
   }
 }
 
 export interface IEdge {
-  from: number;
-  to: number;
+  from: string;
+  to: string;
 }
 
 export class Edges {
   /** Keeps track of all the edges related to all the nodes */
-  private _map: Map<number, number[]> = new Map();
+  private _map: Map<string, string[]> = new Map();
 
   /** Keeps track of all the edges */
-  private _set: Set<IEdge> = new Set();
+  private _list: IEdge[] = [];
 
   /** Adds the given edge to the map */
-  private _addSingleEdge(from: number, to: number) {
+  private _addSingleEdge(from: string, to: string) {
     const toIds = this._map.get(from);
 
     if (toIds) {
@@ -31,29 +31,29 @@ export class Edges {
   }
 
   /** Adds the given undirected edge */
-  public add(from: number, to: number) {
+  public add(from: string, to: string) {
     this._addSingleEdge(from, to);
 
     if (from !== to) {
       this._addSingleEdge(to, from);
     }
 
-    this.set.add({ from, to });
+    this.list.push({ from, to });
   }
 
   /** Returns all edges coming from/to the given node ID */
-  public get(from: number): number[] | null {
+  public get(from: string): string[] | null {
     return this._map.get(from) || null;
   }
 
   /** Returns the set of all the edges */
-  public get set(): Set<IEdge> {
-    return this._set;
+  public get list(): IEdge[] {
+    return this._list;
   }
 
   /** Returns a iterator to go over the set of edges */
   public *[Symbol.iterator]() {
-    for (const { from, to } of this.set) {
+    for (const { from, to } of this.list) {
       yield [from, to];
     }
   }
