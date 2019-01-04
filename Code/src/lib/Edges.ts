@@ -1,12 +1,9 @@
+import { IEdge } from "./Edge";
+
 export class DuplicateEdgeError extends Error {
   constructor(public from: string, public to: string) {
     super(`Duplicate edge ${from} - ${to}`);
   }
-}
-
-export interface IEdge {
-  from: string;
-  to: string;
 }
 
 export class Edges {

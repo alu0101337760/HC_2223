@@ -2,39 +2,15 @@ import React, { Component } from "react";
 import "./App.scss";
 import Graph from "react-graph-vis";
 import SubmittableTextarea from "./components/SubmittableTextarea";
-import {
-  IVertexCoverInstance,
-  vertexCoverInstanceParser
-} from "./lib/vertexCoverInstanceParser";
-import { IEdge } from "./lib/Edges";
+import { vertexCoverInstanceParser } from "./lib/vertexCoverInstanceParser";
+import { IVertexCoverInstance } from "./lib/IVertexCoverInstance";
+import { IGraph } from "./lib/Graph";
+import transformation from "./lib/transformation";
 
-interface INode {
-  id: string;
-}
-
-interface IGraph {
-  nodes: INode[];
-  edges: IEdge[];
-}
-
-const exampleGraph = {
-  nodes: [
-    { id: "1", label: "1" },
-    { id: "2", label: "2" },
-    { id: "3", label: "3" },
-    { id: "4", label: "4" }
-  ],
-  edges: [
-    { from: "1", to: "2" },
-    { from: "2", to: "3" },
-    { from: "1", to: "3" },
-    { from: "3", to: "4" }
-  ]
-};
-
-const vertexCoverGraphOptions = {
+const graphOptions = {
   layout: {
-    hierarchical: false
+    hierarchical: false,
+    randomSeed: 0
   },
   edges: {
     color: "#000000",
@@ -49,33 +25,37 @@ const vertexCoverGraphOptions = {
   }
 };
 
-function graphFromVertexCoverInstance({
-  nodes,
-  edges
-}: IVertexCoverInstance): IGraph {
+function addLabelsToGraph({ nodes, edges }: IGraph): IGraph {
   return {
-    nodes: [...nodes].map(id => ({ id, label: id })),
+    nodes: nodes.map(({ id }) => ({ id, label: id })),
     edges: edges
   };
 }
 
 interface State {
-  vertexCoverGraphs: IGraph[];
+  vcGraphs: IGraph[];
+  hcGraphs: IGraph[];
 }
 
 class App extends Component<{}, State> {
   state: State = {
-    vertexCoverGraphs: [exampleGraph]
+    vcGraphs: [],
+    hcGraphs: []
   };
 
   onNewProblemInstance = (value: string): boolean => {
     try {
-      const newInstance = vertexCoverInstanceParser(value);
-      console.log({ value, newInstance });
-      this.setState(prevState => ({
-        vertexCoverGraphs: prevState.vertexCoverGraphs.concat([
-          graphFromVertexCoverInstance(newInstance)
-        ])
+      const vcInstance = vertexCoverInstanceParser(value);
+      const hcInstance = transformation(vcInstance);
+
+      console.log({ value, vcInstance, hcInstance });
+
+      const vcGraph = addLabelsToGraph(vcInstance.graph);
+      const hcGraph = addLabelsToGraph(hcInstance);
+
+      this.setState(({ vcGraphs, hcGraphs }) => ({
+        vcGraphs: [...vcGraphs, vcGraph],
+        hcGraphs: [...hcGraphs, hcGraph]
       }));
     } catch (error) {
       console.error(error);
@@ -84,10 +64,12 @@ class App extends Component<{}, State> {
   };
 
   render() {
+    const { vcGraphs, hcGraphs } = this.state;
+
     return (
       <div className="container">
         <SubmittableTextarea onSubmit={this.onNewProblemInstance} />
-        {this.state.vertexCoverGraphs.map((graph, index) => (
+        {vcGraphs.map((vcGraph, index) => (
           <div key={index} style={{ height: "80vh", display: "flex" }}>
             <div
               style={{
@@ -96,7 +78,16 @@ class App extends Component<{}, State> {
                 border: "1px solid black"
               }}
             >
-              <Graph graph={graph} options={vertexCoverGraphOptions} />
+              <Graph graph={vcGraph} options={graphOptions} />
+            </div>
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                border: "1px solid black"
+              }}
+            >
+              <Graph graph={hcGraphs[index]} options={graphOptions} />
             </div>
           </div>
         ))}

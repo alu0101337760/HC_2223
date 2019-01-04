@@ -1,19 +1,23 @@
-import Edge from "./Edge";
-import Vertex from "./Vertex";
+import { IEdge } from "./Edge";
+import { INode } from "./Node";
+
+export interface IGraph {
+  nodes: INode[];
+  edges: IEdge[];
+}
 
 /**
  * Class which represents an undirected Graph
  */
-export default class Graph {
+export default class Graph implements IGraph {
+  nodes: INode[] = [];
+  edges: IEdge[] = [];
 
-  vertices: Vertex[] = [];
-  edges: Edge[] = [];
-
-  addVertices(newVertices: Vertex[]) {
-    this.vertices = [...this.vertices, ...newVertices];
+  addVertices(newVertices: INode[]) {
+    this.nodes = [...this.nodes, ...newVertices];
   }
 
-  addEdges(newEdges: Edge[]) {
+  addEdges(newEdges: IEdge[]) {
     this.edges = [...this.edges, ...newEdges];
   }
 }

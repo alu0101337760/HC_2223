@@ -1,14 +1,17 @@
+export interface IEdge {
+  from: string;
+  to: string;
+}
 
 /**
  * Class which represents an undirected graph edge.
  */
-export default class Edge {
+export default class Edge implements IEdge {
+  from: string;
+  to: string;
 
-  firstVertexID: string;
-  secondVertexID: string;
-
-  constructor(firstVertexID: string, secondVertexID: string) {
-    this.firstVertexID = firstVertexID;
-    this.secondVertexID = secondVertexID;
+  constructor(from: string, to: string) {
+    this.from = from;
+    this.to = to;
   }
 }

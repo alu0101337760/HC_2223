@@ -1,12 +1,9 @@
-import { IEdge, Edges } from "./Edges";
+import { Edges } from "./Edges";
+import { IEdge } from "./Edge";
+import { IVertexCoverInstance } from "./IVertexCoverInstance";
+import Node from "./Node";
 
 // TODO: Create better classes for errors
-
-export interface IVertexCoverInstance {
-  coverSize: number;
-  nodes: Set<string>;
-  edges: IEdge[];
-}
 
 const LINES_SEPARATOR = "\n";
 const ELEMENTS_SEPARATOR = ",";
@@ -27,16 +24,17 @@ export function vertexCoverInstanceParser(
   }
 
   const [coverSizeRepr, nodesRepr, ...verticesRepr] = lines;
-  const nodes = parseNodes(nodesRepr);
-  const edges = parseEdges(verticesRepr);
+  const nodeSet = parseNodes(nodesRepr);
+  const edgesMap = parseEdges(verticesRepr);
+  const edges = [...edgesMap.list];
   const coverSize = parseCoverSize(coverSizeRepr);
 
   // Check that all edges are from valid nodes to valid nodes
   let invalidNode = null;
   for (const { from, to } of edges) {
-    if (!nodes.has(from)) {
+    if (!nodeSet.has(from)) {
       invalidNode = from;
-    } else if (!nodes.has(to)) {
+    } else if (!nodeSet.has(to)) {
       invalidNode = to;
     }
 
@@ -48,15 +46,21 @@ export function vertexCoverInstanceParser(
   }
 
   // Check that the cover size is plausible
-  if (coverSize < 1 || coverSize > nodes.size) {
+  if (coverSize < 1 || coverSize > nodeSet.size) {
     throw new Error(
       `Invalid cover size. Must be between 1 and ${
-        nodes.size
+        nodeSet.size
       } (size of the set of nodes)`
     );
   }
 
-  return { coverSize, nodes, edges };
+  return {
+    coverSize,
+    graph: {
+      nodes: [...nodeSet].map(repr => new Node(repr)),
+      edges
+    }
+  };
 }
 
 export function parseNodes(nodesRepr: string): Set<string> {
@@ -65,7 +69,7 @@ export function parseNodes(nodesRepr: string): Set<string> {
   return new Set(nodesReprs);
 }
 
-export function parseEdges(verticesRepr: string[]): IEdge[] {
+export function parseEdges(verticesRepr: string[]): Edges {
   const edges = new Edges();
 
   for (const vertexRepr of verticesRepr) {
@@ -81,7 +85,7 @@ export function parseEdges(verticesRepr: string[]): IEdge[] {
     edges.add(from.trim(), to.trim());
   }
 
-  return [...edges.list];
+  return edges;
 }
 
 export function parseCoverSize(coverSizeRepr: string) {
