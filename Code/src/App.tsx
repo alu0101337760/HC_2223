@@ -3,7 +3,6 @@ import "./App.scss";
 import Graph from "react-graph-vis";
 import SubmittableTextarea from "./components/SubmittableTextarea";
 import { vertexCoverInstanceParser } from "./lib/vertexCoverInstanceParser";
-import { IVertexCoverInstance } from "./lib/IVertexCoverInstance";
 import { IGraph } from "./lib/Graph";
 import transformation from "./lib/transformation";
 
@@ -25,13 +24,6 @@ const graphOptions = {
   }
 };
 
-function addLabelsToGraph({ nodes, edges }: IGraph): IGraph {
-  return {
-    nodes: nodes.map(({ id }) => ({ id, label: id })),
-    edges: edges
-  };
-}
-
 interface State {
   vcGraphs: IGraph[];
   hcGraphs: IGraph[];
@@ -50,12 +42,9 @@ class App extends Component<{}, State> {
 
       console.log({ value, vcInstance, hcInstance });
 
-      const vcGraph = addLabelsToGraph(vcInstance.graph);
-      const hcGraph = addLabelsToGraph(hcInstance);
-
       this.setState(({ vcGraphs, hcGraphs }) => ({
-        vcGraphs: [...vcGraphs, vcGraph],
-        hcGraphs: [...hcGraphs, hcGraph]
+        vcGraphs: [...vcGraphs, vcInstance.graph],
+        hcGraphs: [...hcGraphs, hcInstance]
       }));
     } catch (error) {
       console.error(error);

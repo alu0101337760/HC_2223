@@ -1,6 +1,5 @@
 import Graph, { IGraph } from "./Graph";
-import Node, { INode } from "./Node";
-import Edge, { IEdge } from "./Edge";
+import Node, { INode, mapToGroupedNodes } from "./Node";
 import EdgeGadget from "./EdgeGadget";
 import { IVertexCoverInstance } from "./IVertexCoverInstance";
 
@@ -12,33 +11,24 @@ export default function transformation({
   graph,
   coverSize
 }: IVertexCoverInstance): IGraph {
-  let newGraph: Graph = new Graph();
+  const newGraph = new Graph();
 
   // Selectors creation
-  let selectors: Node[] = [];
+  const selectors: INode[] = [];
   for (let i = 1; i <= coverSize; ++i) {
     selectors.push(new Node("Selector-" + i));
   }
-  newGraph.addVertices(selectors);
+  newGraph.addVertices(mapToGroupedNodes(selectors, 0));
 
   // Edge gadgets creation
-  let edgeGadgets: EdgeGadget[] = [];
-  let vertexAndEdgeGadgetsInfo: Map<string, EdgeGadget[]> = new Map<
-    string,
-    EdgeGadget[]
-  >();
-  graph.nodes.forEach((vertex: Node) =>
-    vertexAndEdgeGadgetsInfo.set(vertex.id, [])
-  );
+  const edgeGadgets: EdgeGadget[] = [];
+  const vertexAndEdgeGadgetsInfo = new Map<string, EdgeGadget[]>();
+  graph.nodes.forEach(({ id }) => vertexAndEdgeGadgetsInfo.set(id, []));
 
-  graph.edges.forEach((edge: Edge) => {
-    let newEdgeGadget: EdgeGadget = new EdgeGadget(edge.from, edge.to);
-    let firstVertexEdgeGadgets:
-      | EdgeGadget[]
-      | undefined = vertexAndEdgeGadgetsInfo.get(edge.from);
-    let secondVertexEdgeGadgets:
-      | EdgeGadget[]
-      | undefined = vertexAndEdgeGadgetsInfo.get(edge.to);
+  graph.edges.forEach(({ from, to }) => {
+    const newEdgeGadget = new EdgeGadget(from, to);
+    const firstVertexEdgeGadgets = vertexAndEdgeGadgetsInfo.get(from);
+    const secondVertexEdgeGadgets = vertexAndEdgeGadgetsInfo.get(to);
 
     if (!firstVertexEdgeGadgets || !secondVertexEdgeGadgets) {
       throw new Error(
@@ -50,26 +40,24 @@ export default function transformation({
     edgeGadgets.push(newEdgeGadget);
   });
 
-  edgeGadgets.forEach((edgeGadget: EdgeGadget) => {
-    newGraph.addVertices(edgeGadget.vertices);
-    newGraph.addEdges(edgeGadget.edges);
+  edgeGadgets.forEach(({ vertices, edges }, i) => {
+    newGraph.addVertices(mapToGroupedNodes(vertices, (i + 1) * 3));
+    newGraph.addEdges(edges);
   });
 
   // Connections between edge gadgets
-  graph.nodes.forEach((vertex: Node) => {
-    let edgeGadgets: EdgeGadget[] | undefined = vertexAndEdgeGadgetsInfo.get(
-      vertex.id
-    );
+  graph.nodes.forEach(({ id }) => {
+    const edgeGadgets = vertexAndEdgeGadgetsInfo.get(id);
     if (!edgeGadgets) {
       throw new Error(
         "Each graph vertex should have an EdgeGadget array initialized"
       );
     }
-    newGraph.addEdges(EdgeGadget.connectEdgeGadgets(edgeGadgets, vertex.id));
+    newGraph.addEdges(EdgeGadget.connectEdgeGadgets(edgeGadgets, id));
   });
 
   // Connections between edge gadgets and selectors
-  edgeGadgets.forEach((edgeGadget: EdgeGadget) =>
+  edgeGadgets.forEach(edgeGadget =>
     newGraph.addEdges(
       EdgeGadget.connectEdgeGadgetWithSelectors(edgeGadget, selectors)
     )

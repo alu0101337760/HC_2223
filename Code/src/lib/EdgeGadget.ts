@@ -1,5 +1,5 @@
-import Edge from "./Edge";
-import Node from "./Node";
+import Edge, { IEdge } from "./Edge";
+import Node, { INode } from "./Node";
 
 /**
  * Class which represents an edge gadget, a data structure
@@ -7,8 +7,8 @@ import Node from "./Node";
  * instances to Hamiltonian Cycle problem instances.
  */
 export default class EdgeGadget {
-  vertices: Node[];
-  edges: Edge[];
+  vertices: INode[];
+  edges: IEdge[];
   edgeGadgetID: string;
 
   leftSideVertexID: string;
@@ -61,18 +61,13 @@ export default class EdgeGadget {
       }
     } else {
       throw new Error(
-        "Edge gadget " +
-          this.edgeGadgetID +
-          " is not a " +
-          vertexID +
-          " edge gadget"
+        `Edge gadget ${this.edgeGadgetID} is not a ${vertexID} edge gadget`
       );
     }
     throw new Error(
-      "Cannot connect edge gadget " +
-        this.edgeGadgetID +
-        " according to vertex " +
-        vertexID
+      `Cannot connect edge gadget ${
+        this.edgeGadgetID
+      } according to vertex ${vertexID}`
     );
   }
 
@@ -82,7 +77,7 @@ export default class EdgeGadget {
   ): Edge[] {
     if (edgeGadgets.length < 2) return [];
 
-    let newEdges: Edge[] = [];
+    const newEdges: Edge[] = [];
     for (let i = 0; i < edgeGadgets.length - 1; ++i) {
       newEdges.push(
         new Edge(
@@ -96,11 +91,11 @@ export default class EdgeGadget {
 
   public static connectEdgeGadgetWithSelectors(
     edgeGadget: EdgeGadget,
-    selectors: Node[]
+    selectors: INode[]
   ): Edge[] {
-    let newEdges: Edge[] = [];
+    const newEdges: Edge[] = [];
 
-    let connectionPoints: string[] = [];
+    const connectionPoints: string[] = [];
     if (!edgeGadget.isTopLeftVertexConnected) {
       edgeGadget.isTopLeftVertexConnected = true;
       connectionPoints.push(edgeGadget.vertices[0].id);
@@ -118,9 +113,9 @@ export default class EdgeGadget {
       connectionPoints.push(edgeGadget.vertices[11].id);
     }
 
-    selectors.forEach((selector: Node) => {
+    selectors.forEach(({ id }) => {
       connectionPoints.forEach(identifier => {
-        newEdges.push(new Edge(selector.id, identifier));
+        newEdges.push(new Edge(id, identifier));
       });
     });
 
