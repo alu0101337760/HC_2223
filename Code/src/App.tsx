@@ -5,6 +5,7 @@ import SubmittableTextarea from "./components/SubmittableTextarea";
 import { vertexCoverInstanceParser } from "./lib/vertexCoverInstanceParser";
 import { IGraph } from "./lib/Graph";
 import transformation from "./lib/transformation";
+import Tabs from "./components/Tabs";
 
 const graphOptions = {
   layout: {
@@ -25,14 +26,15 @@ const graphOptions = {
 };
 
 interface State {
-  vcGraphs: IGraph[];
-  hcGraphs: IGraph[];
+  instances: {
+    vcGraph: IGraph;
+    hcGraph: IGraph;
+  }[];
 }
 
 class App extends Component<{}, State> {
   state: State = {
-    vcGraphs: [],
-    hcGraphs: []
+    instances: []
   };
 
   onNewProblemInstance = (value: string): boolean => {
@@ -42,9 +44,11 @@ class App extends Component<{}, State> {
 
       console.log({ value, vcInstance, hcInstance });
 
-      this.setState(({ vcGraphs, hcGraphs }) => ({
-        vcGraphs: [...vcGraphs, vcInstance.graph],
-        hcGraphs: [...hcGraphs, hcInstance]
+      this.setState(({ instances }) => ({
+        instances: instances.concat({
+          vcGraph: vcInstance.graph,
+          hcGraph: hcInstance
+        })
       }));
     } catch (error) {
       console.error(error);
@@ -53,23 +57,21 @@ class App extends Component<{}, State> {
   };
 
   render() {
-    const { vcGraphs, hcGraphs } = this.state;
-
     return (
       <div className="container">
         <SubmittableTextarea onSubmit={this.onNewProblemInstance} />
-        {vcGraphs.map((vcGraph, index) => (
-          <div key={index} className="result-container">
+        {this.state.instances.map(({ vcGraph, hcGraph }, index) => (
+          <Tabs
+            key={index}
+            tabNames={["Vertex Cover Graph", "Hamiltonian Circuit Graph"]}
+          >
             <div className="graph-container">
               <Graph graph={vcGraph} options={graphOptions} />
             </div>
-            <div
-              className="graph-container"
-              style={{ borderTop: "1px solid #555" }}
-            >
-              <Graph graph={hcGraphs[index]} options={graphOptions} />
+            <div className="graph-container">
+              <Graph graph={hcGraph} options={graphOptions} />
             </div>
-          </div>
+          </Tabs>
         ))}
       </div>
     );
