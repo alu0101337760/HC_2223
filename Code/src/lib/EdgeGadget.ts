@@ -42,50 +42,39 @@ export default class EdgeGadget {
     this.edges.push(new Edge(this.vertices[5].id, this.vertices[9].id));
   }
 
-  getConnectionPoint(vertexID: string): string {
-    if (this.leftSideVertexID === vertexID) {
-      if (!this.isTopLeftVertexConnected) {
-        this.isTopLeftVertexConnected = true;
-        return this.vertices[0].id;
-      } else if (!this.isBottomLeftVertexConnected) {
-        this.isBottomLeftVertexConnected = true;
-        return this.vertices[5].id;
-      }
-    } else if (this.rightSideVertexID === vertexID) {
-      if (!this.isTopRightVertexConnected) {
-        this.isTopRightVertexConnected = true;
-        return this.vertices[6].id;
-      } else if (!this.isBottomRightVertexConnected) {
-        this.isBottomRightVertexConnected = true;
-        return this.vertices[11].id;
-      }
-    } else {
-      throw new Error(
-        `Edge gadget ${this.edgeGadgetID} is not a ${vertexID} edge gadget`
-      );
-    }
-    throw new Error(
-      `Cannot connect edge gadget ${
-        this.edgeGadgetID
-      } according to vertex ${vertexID}`
-    );
-  }
-
   public static connectEdgeGadgets(
     edgeGadgets: EdgeGadget[],
     vertexID: string
   ): Edge[] {
-    if (edgeGadgets.length < 2) return [];
-
-    const newEdges: Edge[] = [];
-    for (let i = 0; i < edgeGadgets.length - 1; ++i) {
-      newEdges.push(
-        new Edge(
-          edgeGadgets[i].getConnectionPoint(vertexID),
-          edgeGadgets[i + 1].getConnectionPoint(vertexID)
-        )
-      );
+    if (edgeGadgets.length < 2) {
+      return [];
     }
+
+    const newEdges: IEdge[] = [];
+    for (let i = 0; i < edgeGadgets.length - 1; ++i) {
+      const firstGadget = edgeGadgets[i];
+      const secondGadget = edgeGadgets[i + 1];
+      let firstId = "";
+      let secondId = "";
+
+      if (vertexID === firstGadget.leftSideVertexID) {
+        firstId = firstGadget.vertices[5].id;
+        firstGadget.isBottomLeftVertexConnected = true;
+      } else {
+        firstId = firstGadget.vertices[11].id;
+        firstGadget.isBottomRightVertexConnected = true;
+      }
+      if (vertexID === secondGadget.leftSideVertexID) {
+        secondId = secondGadget.vertices[0].id;
+        secondGadget.isTopLeftVertexConnected = true;
+      } else {
+        secondId = secondGadget.vertices[6].id;
+        secondGadget.isTopRightVertexConnected = true;
+      }
+
+      newEdges.push(new Edge(firstId, secondId));
+    }
+
     return newEdges;
   }
 

@@ -59,22 +59,13 @@ class App extends Component<{}, State> {
       <div className="container">
         <SubmittableTextarea onSubmit={this.onNewProblemInstance} />
         {vcGraphs.map((vcGraph, index) => (
-          <div key={index} style={{ height: "80vh", display: "flex" }}>
-            <div
-              style={{
-                width: "100%",
-                height: "100%",
-                border: "1px solid black"
-              }}
-            >
+          <div key={index} className="result-container">
+            <div className="graph-container">
               <Graph graph={vcGraph} options={graphOptions} />
             </div>
             <div
-              style={{
-                width: "100%",
-                height: "100%",
-                border: "1px solid black"
-              }}
+              className="graph-container"
+              style={{ borderTop: "1px solid #555" }}
             >
               <Graph graph={hcGraphs[index]} options={graphOptions} />
             </div>
