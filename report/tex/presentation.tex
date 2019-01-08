@@ -1,11 +1,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Demostración de la NP-Completitud
-% del problema del Circuito Hamiltoniano
-% (Presentation)
+% Demostración de la NP-Completitud del problema 
+% del Circuito Hamiltoniano (Presentation)
 % Complejidad Computacional
 % Universidad de La Laguna
-%
-% -- Autores
+% 
+% -- Authors
 % Carlos Domínguez García (alu0100966589@ull.edu.es)
 % Daute Rodríguez Rodríguez (alu0100973914@ull.edu.es)
 % Alberto Jesús González Álvarez (alu0100949568@ull.edu.es)
@@ -29,8 +28,8 @@
 \title[HC $\mathcal{NP}$-Completitud]{Demostración de la $\mathcal{NP}$-Completitud del problema del Circuito Hamiltoniano}
 \subtitle{Complejidad Computacional}
 \author[C.D.G., D.R.R., A.G.A., C.A.D.]{
-    Carlos Domínguez García,\\
-    Daute Rodríguez Rodríguez,\\
+    Carlos Domínguez García,\\ 
+    Daute Rodríguez Rodríguez,\\ 
     Alberto Jesús González Álvarez,\\
     Cristian Manuel Abrante Dorta
 }
@@ -88,7 +87,7 @@
 \begin{frame}{Descripción formal}
     La formulación del problema es la siguiente:
     \begin{block}{Instancia}
-        La entrada es un grafo:
+        La entrada es un grafo: 
         \[G=(V, E)\]
         \[V = \{v_1, v_2, \dots, v_n\} \quad |V| = n\]
         \[E = \{\{u, v\} : u, v \in V\}\]
@@ -96,7 +95,7 @@
     \begin{block}{Pregunta}
         \begin{center}
             \textit{¿Contiene G un Camino Hamiltoniano?}\\
-            Es decir, contiene G una secuencia ordenada $\displaystyle <v_1, v_2, \dots, v_n>$,
+            Es decir, contiene G una secuencia ordenada $\displaystyle <v_1, v_2, \dots, v_n>$, 
             de tamaño $|V| = n$, tal que:
             \[\{v_n, v_1\} \in E \land \{v_i, v_{i+1}\} \in E \quad \forall i, 1 \le i < n\]
         \end{center}
@@ -118,7 +117,7 @@
     Para demostrar que un problema ($p$) es $\mathcal{NP}\textbf{-Completo}$, se tiene que satisfacer estas condiciones:
     \vfill
     \begin{enumerate}[I]
-        \item El problema pertenece a $\mathcal{NP}$, es decir que existe una \textbf{máquina de Turing no detrminista} que resuelve el problema en tiempo polinomial.
+        \item El problema pertenece a $\mathcal{NP}$, es decir que existe una \textbf{máquina de Turing no determinista} que resuelve el problema en tiempo polinomial.
         \[p \in \mathcal{NP}\]
         \item Existe una \textbf{reducción polinomial} de cada uno de los problemas de $\mathcal{NP}$
         a $p$:
@@ -136,7 +135,7 @@
             \label{fig:my_label}
         \end{figure}
     }
-
+    
     \only<2> {
         \begin{figure}
             \centering
@@ -187,7 +186,7 @@
     Esta demostración se basará en la \textbf{construcción de componentes}.
 \end{frame}
 
-\subsubsection{selectores}
+\subsubsection{Nodos selectores}
 \begin{frame}{Demostración de II (Selectores)}
     El primer conjunto de componentes será el de los \textbf{selectores}, el cual será un conjunto de vértices.
     \[\{a_1, a_2, \cdots ,a_K\}\]
@@ -195,9 +194,9 @@
     \[\{a_i : 1 \le i \le K \}\]
 \end{frame}
 
-\subsubsection{cover-testing}
+\subsubsection{Componentes cover-testing}
 \begin{frame}{Demostración de II (Componente cover-testing)}
-    Construimos un compoenente \textbf{cover testing} por cada arista en $E$ ($\forall e \in E$).
+    Construimos un componente \textbf{cover-testing} por cada arista en $E$ ($\forall e \in E$). 
     Utilizados para garantizar que al menos uno de los vértices de esa arista está entre
     los $K$ vértices seleccionados.\\
     \vfill
@@ -256,7 +255,7 @@
             \label{fig:my_label}
         \end{figure}
         \column{0.33 \linewidth}
-
+        
         \begin{figure}
             \includegraphics[scale=0.2]{images/cover-testing-4.png}
             \caption{$u$ y $v$ están en el cubrimiento}
@@ -282,9 +281,8 @@
     \[E'' = \{\{a_i, (v,e_{v[1], 1})\},\{a_i, (v,e_{v[deg(v)]}, 6)\} : 1 \le i \le K, v \in V \}\]
 \end{frame}
 
-\subsubsection{Prueba}
 \begin{frame}{Demostración de II}
-    Una vez hemos definido los componentes y concexiones, defnimos $G'$ como:
+    Una vez hemos definido los componentes y conexiones, definimos $G'$ como:
     \begin{block}{$G'$}
         \[G' = (V', E')\]
         \[V' = \{a_i : 1 \le i \le K\} \cup (\bigcup_{e \in E} V'_e)\]
@@ -294,7 +292,7 @@
 
 \begin{frame}{Demostración de II}
     \begin{block}{Demostración}
-        La demostración de II consiste en que si existe un VC de tamaño $K$ en $G$,
+        La demostración de II consiste en que si existe un VC de tamaño $K$ en $G$, 
         entonces ha de existir un HC en $G'$.
     \end{block}
     Sea $V^* \subseteq V$ un Vertex Cover en $G$, de tamaño $K$: $V^* = \{v_1,v_2, \cdots, v_k \}$\\
@@ -360,7 +358,7 @@
 \begin{frame}{Ejemplo}
     Construimos el grafo $G' = (V', E')$:
     \begin{block}{}
-        Conectamos los componentes cover-testing con los selectores:
+        Conectamos los componentes cover-testing con los selectores:  
         $E'' = \{\{a_i, (v,e_{v[1], 1})\},\{a_i, (v,e_{v[deg(v)]}, 6)\} : 1 \le i \le K, v \in V \}$
     \end{block}
     \begin{figure}
@@ -393,7 +391,7 @@
 
 \begin{frame}[allowframebreaks]
     \frametitle<presentation>{Referencias}
-    \begin{thebibliography}{10}
+    \begin{thebibliography}{10}    
         \beamertemplatebookbibitems
         \bibitem{GareyJohnson}
              Michael Garey, David S. Johnson.
