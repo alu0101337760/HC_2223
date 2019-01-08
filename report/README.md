@@ -7,12 +7,12 @@ the **NP-Completeness** of the Hamiltonian Circuit Problem.
 In this folder we provide the `Latex` documents both for the presentatation
 and for the report.
 
-* `tex/presentatation.tex`: Beamer presentation source code.
-* `tex/article.tex`: Latex article source code.
+* `tex/presentation.tex`: Beamer presentation source code.
+* `tex/report.tex`: Latex report source code.
 
 ### `pdf` folder
 In this folder are placed the compiled `pdf` files of the presentation and
 report.
 
-* `pdf/presentatation.pdf`: pdf presentation.
-* `pdf/article.tex`: pdf article.
+* `pdf/Hamiltonian_Circuit_Presentation.pdf`: pdf presentation.
+* `pdf/Hamiltonian_Circuit_Report.pdf.tex`: pdf report.
