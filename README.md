@@ -26,3 +26,8 @@ and a _Hamiltonian Circuit_, one of the necessary conditions to be np-complete.
 
 ## Authors
 
+Ayob Asrout Vargas // alu0101350158
+Dario Cerviño Luridiana // alu0101315058
+Enrique Viña Alonso // alu0101337760
+Juan García Santos // alu0101325583
+
