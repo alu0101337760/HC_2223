@@ -4,7 +4,6 @@
     {
         static public Graph VC2HC(Graph inputGraph)
         {
-
             return null;
         }       
     }
