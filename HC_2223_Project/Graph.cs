@@ -4,8 +4,8 @@ namespace HC_2223_Project
 {
     public class Graph
     {
-        int numberOfVertex;
-        HashSet<(int, int)> arcs;
+        public int numberOfVertex { get; private set; }
+        public HashSet<(int, int)> arcs { get; private set; }
 
         public Graph(int numberOfVertex, HashSet<(int, int)> arcs)
         {
