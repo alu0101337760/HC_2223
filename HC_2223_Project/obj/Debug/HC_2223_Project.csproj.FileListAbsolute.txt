@@ -1,0 +1,3 @@
+D:\Code\HC_2223\HC_2223_Project\obj\Debug\HC_2223_Project.csproj.AssemblyReference.cache
+D:\Code\HC_2223\HC_2223_Project\obj\Debug\HC_2223_Project.csproj.SuggestedBindingRedirects.cache
+D:\Code\HC_2223\HC_2223_Project\obj\Debug\HC_2223_Project.csproj.CoreCompileInputs.cache
