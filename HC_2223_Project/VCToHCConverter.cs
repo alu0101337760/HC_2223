@@ -5,7 +5,25 @@ namespace HC_2223_Project
 {
     public class VCToHCConverter
     {
-        
+
+        static private void AddVertexCoverArcs(int i, ref HashSet<(int, int)> newArcs)
+        {
+            newArcs.Add((i * 12 + 1, i * 12 + 2));
+            newArcs.Add((i * 12 + 2, i * 12 + 3));
+            newArcs.Add((i * 12 + 3, i * 12 + 4));
+            newArcs.Add((i * 12 + 4, i * 12 + 5));
+            newArcs.Add((i * 12 + 5, i * 12 + 6));
+            newArcs.Add((i * 12 + 7, i * 12 + 8));
+            newArcs.Add((i * 12 + 8, i * 12 + 9));
+            newArcs.Add((i * 12 + 9, i * 12 + 10));
+            newArcs.Add((i * 12 + 10, i * 12 + 11));
+            newArcs.Add((i * 12 + 11, i * 12 + 12));
+            newArcs.Add((i * 12 + 1, i * 12 + 9));
+            newArcs.Add((i * 12 + 3, i * 12 + 7));
+            newArcs.Add((i * 12 + 4, i * 12 + 12));
+            newArcs.Add((i * 12 + 6, i * 12 + 10));
+        }
+
         static public Graph VC2HC(Graph inputGraph, int VertexCoverSize)
         {
             List<(int, int)> arcsList = new List<(int, int)>(inputGraph.arcs);
@@ -27,6 +45,7 @@ namespace HC_2223_Project
                     endpoints.Add(i * 12 + 7);
                     startedPaths.Add(arcsList[i].Item2);
                 }
+
                 bool item1Connection = true;
                 bool item2Connection = true;
                 if (arcsList[i].Item1 == arcsList[i].Item2)
@@ -34,6 +53,7 @@ namespace HC_2223_Project
                     newArcs.Add((i * 12 + 6, i * 12 + 7));
                     item1Connection = false;
                 }
+
                 for (int j = i + 1; j < arcsList.Count && (item1Connection || item2Connection); ++j)
                 {
                     if (item1Connection)
@@ -63,20 +83,8 @@ namespace HC_2223_Project
                         }
                     }
                 }
-                newArcs.Add((i * 12 + 1, i * 12 + 2));
-                newArcs.Add((i * 12 + 2, i * 12 + 3));
-                newArcs.Add((i * 12 + 3, i * 12 + 4));
-                newArcs.Add((i * 12 + 4, i * 12 + 5));
-                newArcs.Add((i * 12 + 5, i * 12 + 6));
-                newArcs.Add((i * 12 + 7, i * 12 + 8));
-                newArcs.Add((i * 12 + 8, i * 12 + 9));
-                newArcs.Add((i * 12 + 9, i * 12 + 10));
-                newArcs.Add((i * 12 + 10, i * 12 + 11));
-                newArcs.Add((i * 12 + 11, i * 12 + 12));
-                newArcs.Add((i * 12 + 1, i * 12 + 9));
-                newArcs.Add((i * 12 + 3, i * 12 + 7));
-                newArcs.Add((i * 12 + 4, i * 12 + 12));
-                newArcs.Add((i * 12 + 6, i * 12 + 10));
+                AddVertexCoverArcs(i, ref newArcs);
+
                 if (item1Connection)
                 {
                     endpoints.Add(i * 12 + 6);
@@ -88,13 +96,13 @@ namespace HC_2223_Project
             }
             // Conectar selectores (quizá se haga en parte en el bucle anterior)
             for (int i = 0; i < endpoints.Count; i++)
-            {                
+            {
                 for (int j = 0; j < VertexCoverSize; j++)
                 {
                     newArcs.Add((endpoints[i], newVertexNumber - VertexCoverSize));
                 }
             }
             return new Graph(newVertexNumber, newArcs);
-        }       
+        }
     }
 }
