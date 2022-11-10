@@ -12,9 +12,21 @@ namespace HC_2223_Project
             HashSet<(int, int)> newArcs = new HashSet<(int, int)>();
             // Crear CoverTesting Vertex y Selectors
             int newVertexNumber = arcsList.Count * 12 + VertexCoverSize;
+            List<int> endpoints = new List<int>();
+            HashSet<int> startedPaths = new HashSet<int>();
             // Conectar CoverTesting
             for (int i = 0; i < arcsList.Count; ++i)
             {
+                if (!startedPaths.Contains(arcsList[i].Item1))
+                {
+                    endpoints.Add(i * 12 + 1);
+                    startedPaths.Add(arcsList[i].Item1);
+                }
+                if (!startedPaths.Contains(arcsList[i].Item2))
+                {
+                    endpoints.Add(i * 12 + 7);
+                    startedPaths.Add(arcsList[i].Item2);
+                }
                 bool item1Connection = true;
                 bool item2Connection = true;
                 if (arcsList[i].Item1 == arcsList[i].Item2)
@@ -30,7 +42,8 @@ namespace HC_2223_Project
                         {
                             newArcs.Add((i * 12 + 6, j * 12 + 1));
                             item1Connection = false;
-                        } else if (arcsList[i].Item1 == arcsList[j].Item2)
+                        }
+                        else if (arcsList[i].Item1 == arcsList[j].Item2)
                         {
                             newArcs.Add((i * 12 + 6, j * 12 + 7));
                             item1Connection = false;
@@ -50,9 +63,38 @@ namespace HC_2223_Project
                         }
                     }
                 }
+                newArcs.Add((i * 12 + 1, i * 12 + 2));
+                newArcs.Add((i * 12 + 2, i * 12 + 3));
+                newArcs.Add((i * 12 + 3, i * 12 + 4));
+                newArcs.Add((i * 12 + 4, i * 12 + 5));
+                newArcs.Add((i * 12 + 5, i * 12 + 6));
+                newArcs.Add((i * 12 + 7, i * 12 + 8));
+                newArcs.Add((i * 12 + 8, i * 12 + 9));
+                newArcs.Add((i * 12 + 9, i * 12 + 10));
+                newArcs.Add((i * 12 + 10, i * 12 + 11));
+                newArcs.Add((i * 12 + 11, i * 12 + 12));
+                newArcs.Add((i * 12 + 1, i * 12 + 9));
+                newArcs.Add((i * 12 + 3, i * 12 + 7));
+                newArcs.Add((i * 12 + 4, i * 12 + 12));
+                newArcs.Add((i * 12 + 6, i * 12 + 10));
+                if (item1Connection)
+                {
+                    endpoints.Add(i * 12 + 6);
+                }
+                if (item2Connection)
+                {
+                    endpoints.Add(i * 12 + 12);
+                }
             }
             // Conectar selectores (quizá se haga en parte en el bucle anterior)
-            return null;
+            for (int i = 0; i < endpoints.Count; i++)
+            {                
+                for (int j = 0; j < VertexCoverSize; j++)
+                {
+                    newArcs.Add((endpoints[i], newVertexNumber - VertexCoverSize));
+                }
+            }
+            return new Graph(newVertexNumber, newArcs);
         }       
     }
 }
