@@ -23,7 +23,7 @@ namespace HC_2223_Project
             string[] lines = System.IO.File.ReadAllLines(filename);
             numberOfVertex = int.Parse(lines[0]);
             arcs = new HashSet<(int, int)>();
-            for (int i = 0; i < lines.Length; ++i)
+            for (int i = 1; i < lines.Length; ++i)
             {
                 string[] line = lines[i].Split(' ');
                 arcs.Add((int.Parse(line[0]), int.Parse(line[1])));

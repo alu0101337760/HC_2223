@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 
 namespace HC_2223_Project
 {
@@ -84,7 +83,6 @@ namespace HC_2223_Project
                     }
                 }
                 AddVertexCoverArcs(i, ref newArcs);
-
                 if (item1Connection)
                 {
                     endpoints.Add(i * 12 + 6);
@@ -94,12 +92,11 @@ namespace HC_2223_Project
                     endpoints.Add(i * 12 + 12);
                 }
             }
-            // Conectar selectores (quizá se haga en parte en el bucle anterior)
             for (int i = 0; i < endpoints.Count; i++)
             {
                 for (int j = 0; j < VertexCoverSize; j++)
                 {
-                    newArcs.Add((endpoints[i], newVertexNumber - VertexCoverSize));
+                    newArcs.Add((endpoints[i], newVertexNumber - j));
                 }
             }
             return new Graph(newVertexNumber, newArcs);

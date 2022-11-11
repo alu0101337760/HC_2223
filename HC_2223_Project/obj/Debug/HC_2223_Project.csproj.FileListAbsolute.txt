@@ -9,3 +9,11 @@ C:\Users\enriq\source\repos\HC_2223\HC_2223_Project\bin\Debug\HC_2223_Project.ex
 C:\Users\enriq\source\repos\HC_2223\HC_2223_Project\bin\Debug\HC_2223_Project.pdb
 C:\Users\enriq\source\repos\HC_2223\HC_2223_Project\obj\Debug\HC_2223_Project.exe
 C:\Users\enriq\source\repos\HC_2223\HC_2223_Project\obj\Debug\HC_2223_Project.pdb
+C:\Users\unkno\OneDrive\Desktop\Documents\CCHC\HC_2223\HC_2223_Project\bin\Debug\HC_2223_Project.exe.config
+C:\Users\unkno\OneDrive\Desktop\Documents\CCHC\HC_2223\HC_2223_Project\bin\Debug\HC_2223_Project.exe
+C:\Users\unkno\OneDrive\Desktop\Documents\CCHC\HC_2223\HC_2223_Project\bin\Debug\HC_2223_Project.pdb
+C:\Users\unkno\OneDrive\Desktop\Documents\CCHC\HC_2223\HC_2223_Project\obj\Debug\HC_2223_Project.csproj.AssemblyReference.cache
+C:\Users\unkno\OneDrive\Desktop\Documents\CCHC\HC_2223\HC_2223_Project\obj\Debug\HC_2223_Project.csproj.SuggestedBindingRedirects.cache
+C:\Users\unkno\OneDrive\Desktop\Documents\CCHC\HC_2223\HC_2223_Project\obj\Debug\HC_2223_Project.csproj.CoreCompileInputs.cache
+C:\Users\unkno\OneDrive\Desktop\Documents\CCHC\HC_2223\HC_2223_Project\obj\Debug\HC_2223_Project.exe
+C:\Users\unkno\OneDrive\Desktop\Documents\CCHC\HC_2223\HC_2223_Project\obj\Debug\HC_2223_Project.pdb
