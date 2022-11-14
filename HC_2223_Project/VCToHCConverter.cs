@@ -2,23 +2,40 @@
 
 namespace HC_2223_Project
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class VCToHCConverter
     {
-        static private void AddEndpointsAndStartedPaths(int i, ref List<(int, int)> arcsList, ref List<int> endpoints, ref HashSet<int> startedPaths)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="arcIndex"></param>
+        /// <param name="currentArc"></param>
+        /// <param name="endpoints"></param>
+        /// <param name="startedPaths"></param>
+        static private void AddEndpointsAndStartedPaths(int arcIndex, (int, int) currentArc, ref List<int> endpoints, ref HashSet<int> startedPaths)
         {
-            if (!startedPaths.Contains(arcsList[i].Item1))
+            if (!startedPaths.Contains(currentArc.Item1))
             {
-                endpoints.Add(i * 12 + 1);
-                startedPaths.Add(arcsList[i].Item1);
+                endpoints.Add(arcIndex * 12 + 1);
+                startedPaths.Add(currentArc.Item1);
             }
-            if (!startedPaths.Contains(arcsList[i].Item2))
+            if (!startedPaths.Contains(currentArc.Item2))
             {
-                endpoints.Add(i * 12 + 7);
-                startedPaths.Add(arcsList[i].Item2);
+                endpoints.Add(arcIndex * 12 + 7);
+                startedPaths.Add(currentArc.Item2);
             }
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="vertexCoverSize"></param>
+        /// <param name="newVertexNumber"></param>
+        /// <param name="endpoints"></param>
+        /// <param name="newArcs"></param>
         static private void ConnectSelectors(int vertexCoverSize, int newVertexNumber, List<int> endpoints, ref HashSet<(int, int)> newArcs)
         {
             for (int i = 0; i < endpoints.Count; i++)
@@ -31,6 +48,11 @@ namespace HC_2223_Project
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="newArcs"></param>
         static private void AddVertexCoverArcs(int i, ref HashSet<(int, int)> newArcs)
         {
             newArcs.Add((i * 12 + 1, i * 12 + 2));
@@ -49,6 +71,13 @@ namespace HC_2223_Project
             newArcs.Add((i * 12 + 6, i * 12 + 10));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="item1IsFree"></param>
+        /// <param name="item2IsFree"></param>
+        /// <param name="endpoints"></param>
         static private void AddRemainingEndpoints(int i, bool item1IsFree, bool item2IsFree, ref List<int> endpoints)
         {
             if (item1IsFree)
@@ -61,6 +90,12 @@ namespace HC_2223_Project
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inputGraph"></param>
+        /// <param name="vertexCoverSize"></param>
+        /// <returns></returns>
         static public Graph VC2HC(Graph inputGraph, int vertexCoverSize)
         {
             List<(int, int)> arcsList = new List<(int, int)>(inputGraph.arcs);
@@ -77,7 +112,7 @@ namespace HC_2223_Project
                 bool item1IsFree = true;
                 bool item2IsFree = true;
 
-                AddEndpointsAndStartedPaths(i, ref arcsList, ref endpoints, ref startedPaths);
+                AddEndpointsAndStartedPaths(i, arcsList[i], ref endpoints, ref startedPaths);
 
                 if (arcsList[i].Item1 == arcsList[i].Item2)
                 {

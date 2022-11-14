@@ -7,17 +7,30 @@ namespace HC_2223_Project
         public int numberOfVertex { get; private set; }
         public HashSet<(int, int)> arcs { get; private set; }
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="numberOfVertex"> The number of vertex in the graph. </param>
+        /// <param name="arcs"> The arcs between the graph vertex. </param>
         public Graph(int numberOfVertex, HashSet<(int, int)> arcs)
         {
             this.numberOfVertex = numberOfVertex;
             this.arcs = arcs;
         }
 
+        /// <summary>
+        ///  Constructor from filename.
+        /// </summary>
+        /// <param name="filename"> Filename to read with encoded graph information. </param>
         public Graph(string filename)
         {
             InitializeFromFile(filename);
         }
 
+        /// <summary>
+        /// Builds the graph from a given file.
+        /// </summary>
+        /// <param name="filename"> The name of the file to build the graph from. </param>
         private void InitializeFromFile(string filename)
         {
             string[] lines = System.IO.File.ReadAllLines(filename);
@@ -30,6 +43,10 @@ namespace HC_2223_Project
             }
         }
 
+        /// <summary>
+        /// Returns a string containing the graph information.
+        /// </summary>
+        /// <returns> A string containing the graph information. </returns>
         public override string ToString()
         {
             string result = numberOfVertex.ToString() + System.Environment.NewLine;
