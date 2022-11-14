@@ -49,6 +49,18 @@ namespace HC_2223_Project
             newArcs.Add((i * 12 + 6, i * 12 + 10));
         }
 
+        static private void AddRemainingEndpoints(int i, bool item1IsFree, bool item2IsFree, ref List<int> endpoints)
+        {
+            if (item1IsFree)
+            {
+                endpoints.Add(i * 12 + 6);
+            }
+            if (item2IsFree)
+            {
+                endpoints.Add(i * 12 + 12);
+            }
+        }
+
         static public Graph VC2HC(Graph inputGraph, int vertexCoverSize)
         {
             List<(int, int)> arcsList = new List<(int, int)>(inputGraph.arcs);
@@ -62,7 +74,6 @@ namespace HC_2223_Project
             // Conectar CoverTesting
             for (int i = 0; i < arcsList.Count; i++)
             {
-
                 bool item1IsFree = true;
                 bool item2IsFree = true;
 
@@ -104,14 +115,7 @@ namespace HC_2223_Project
                     }
                 }
                 AddVertexCoverArcs(i, ref newArcs);
-                if (item1IsFree)
-                {
-                    endpoints.Add(i * 12 + 6);
-                }
-                if (item2IsFree)
-                {
-                    endpoints.Add(i * 12 + 12);
-                }
+                AddRemainingEndpoints(i, item1IsFree, item2IsFree, ref endpoints);
             }
 
             ConnectSelectors(vertexCoverSize, newVertexNumber, endpoints, ref newArcs);
