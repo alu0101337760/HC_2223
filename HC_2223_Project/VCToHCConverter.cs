@@ -4,6 +4,32 @@ namespace HC_2223_Project
 {
     public class VCToHCConverter
     {
+        static private void AddEndpointsAndStartedPaths(int i, ref List<(int, int)> arcsList, ref List<int> endpoints, ref HashSet<int> startedPaths)
+        {
+            if (!startedPaths.Contains(arcsList[i].Item1))
+            {
+                endpoints.Add(i * 12 + 1);
+                startedPaths.Add(arcsList[i].Item1);
+            }
+            if (!startedPaths.Contains(arcsList[i].Item2))
+            {
+                endpoints.Add(i * 12 + 7);
+                startedPaths.Add(arcsList[i].Item2);
+            }
+
+        }
+
+        static private void ConnectSelectors(int vertexCoverSize, int newVertexNumber, List<int> endpoints, ref HashSet<(int, int)> newArcs)
+        {
+            for (int i = 0; i < endpoints.Count; i++)
+            {
+                for (int j = 0; j < vertexCoverSize; j++)
+                {
+                    newArcs.Add((endpoints[i], newVertexNumber - j));
+                }
+            }
+
+        }
 
         static private void AddVertexCoverArcs(int i, ref HashSet<(int, int)> newArcs)
         {
@@ -23,82 +49,77 @@ namespace HC_2223_Project
             newArcs.Add((i * 12 + 6, i * 12 + 10));
         }
 
-        static public Graph VC2HC(Graph inputGraph, int VertexCoverSize)
+        static private void AddRemainingEndpoints(int i, bool item1IsFree, bool item2IsFree, ref List<int> endpoints)
+        {
+            if (item1IsFree)
+            {
+                endpoints.Add(i * 12 + 6);
+            }
+            if (item2IsFree)
+            {
+                endpoints.Add(i * 12 + 12);
+            }
+        }
+
+        static public Graph VC2HC(Graph inputGraph, int vertexCoverSize)
         {
             List<(int, int)> arcsList = new List<(int, int)>(inputGraph.arcs);
             HashSet<(int, int)> newArcs = new HashSet<(int, int)>();
+
             // Crear CoverTesting Vertex y Selectors
-            int newVertexNumber = arcsList.Count * 12 + VertexCoverSize;
+            int newVertexNumber = arcsList.Count * 12 + vertexCoverSize;
             List<int> endpoints = new List<int>();
             HashSet<int> startedPaths = new HashSet<int>();
-            // Conectar CoverTesting
-            for (int i = 0; i < arcsList.Count; ++i)
-            {
-                if (!startedPaths.Contains(arcsList[i].Item1))
-                {
-                    endpoints.Add(i * 12 + 1);
-                    startedPaths.Add(arcsList[i].Item1);
-                }
-                if (!startedPaths.Contains(arcsList[i].Item2))
-                {
-                    endpoints.Add(i * 12 + 7);
-                    startedPaths.Add(arcsList[i].Item2);
-                }
 
-                bool item1Connection = true;
-                bool item2Connection = true;
+            // Conectar CoverTesting
+            for (int i = 0; i < arcsList.Count; i++)
+            {
+                bool item1IsFree = true;
+                bool item2IsFree = true;
+
+                AddEndpointsAndStartedPaths(i, ref arcsList, ref endpoints, ref startedPaths);
+
                 if (arcsList[i].Item1 == arcsList[i].Item2)
                 {
                     newArcs.Add((i * 12 + 6, i * 12 + 7));
-                    item1Connection = false;
+                    item1IsFree = false;
                 }
 
-                for (int j = i + 1; j < arcsList.Count && (item1Connection || item2Connection); ++j)
+                for (int j = i + 1; j < arcsList.Count && (item1IsFree || item2IsFree); j++)
                 {
-                    if (item1Connection)
+                    if (item1IsFree)
                     {
                         if (arcsList[i].Item1 == arcsList[j].Item1)
                         {
                             newArcs.Add((i * 12 + 6, j * 12 + 1));
-                            item1Connection = false;
+                            item1IsFree = false;
                         }
                         else if (arcsList[i].Item1 == arcsList[j].Item2)
                         {
                             newArcs.Add((i * 12 + 6, j * 12 + 7));
-                            item1Connection = false;
+                            item1IsFree = false;
                         }
                     }
-                    if (item2Connection)
+                    if (item2IsFree)
                     {
                         if (arcsList[i].Item2 == arcsList[j].Item1)
                         {
                             newArcs.Add((i * 12 + 12, j * 12 + 1));
-                            item2Connection = false;
+                            item2IsFree = false;
                         }
                         else if (arcsList[i].Item2 == arcsList[j].Item2)
                         {
                             newArcs.Add((i * 12 + 12, j * 12 + 7));
-                            item2Connection = false;
+                            item2IsFree = false;
                         }
                     }
                 }
                 AddVertexCoverArcs(i, ref newArcs);
-                if (item1Connection)
-                {
-                    endpoints.Add(i * 12 + 6);
-                }
-                if (item2Connection)
-                {
-                    endpoints.Add(i * 12 + 12);
-                }
+                AddRemainingEndpoints(i, item1IsFree, item2IsFree, ref endpoints);
             }
-            for (int i = 0; i < endpoints.Count; i++)
-            {
-                for (int j = 0; j < VertexCoverSize; j++)
-                {
-                    newArcs.Add((endpoints[i], newVertexNumber - j));
-                }
-            }
+
+            ConnectSelectors(vertexCoverSize, newVertexNumber, endpoints, ref newArcs);
+
             return new Graph(newVertexNumber, newArcs);
         }
     }
