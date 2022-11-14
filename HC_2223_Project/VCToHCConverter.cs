@@ -30,28 +30,10 @@ namespace HC_2223_Project
         }
 
         /// <summary>
-        /// 
+        /// Adds all of the internal arcs of the current cover testing to newArcs
         /// </summary>
-        /// <param name="vertexCoverSize"></param>
-        /// <param name="newVertexNumber"></param>
-        /// <param name="outerPoints"></param>
-        /// <param name="newArcs"></param>
-        static private void ConnectSelectors(int vertexCoverSize, int newVertexNumber, List<int> outerPoints, ref HashSet<(int, int)> newArcs)
-        {
-            for (int i = 0; i < outerPoints.Count; i++)
-            {
-                for (int j = 0; j < vertexCoverSize; j++)
-                {
-                    newArcs.Add((outerPoints[i], newVertexNumber - j));
-                }
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="i"></param>
-        /// <param name="newArcs"></param>
+        /// <param name="i"> The index of the current arc being examined. </param>
+        /// <param name="newArcs"> The HashSet containing all of the arcs of the output graph. </param>
         static private void AddCoverTestingArcs(int i, ref HashSet<(int, int)> newArcs)
         {
             newArcs.Add((i * 12 + 1, i * 12 + 2));
@@ -71,12 +53,12 @@ namespace HC_2223_Project
         }
 
         /// <summary>
-        /// 
+        /// Checks if the vertex of the current arc remain unconnected and adds them to outer points if so.
         /// </summary>
-        /// <param name="i"></param>
-        /// <param name="item1IsFree"></param>
-        /// <param name="item2IsFree"></param>
-        /// <param name="outerPoints"></param>
+        /// <param name="i"> The index of the current arc being examined. </param>
+        /// <param name="item1IsFree"> Boolean variable that indicates if the first item of the arc is unconnected. </param>
+        /// <param name="item2IsFree"> Boolean variable that indicates if the second item of the arc is unconnected. </param>
+        /// <param name="outerPoints"> The list with all of the cover testing endpoints free to bond with the selectors. </param>
         static private void AddRemainingOuterPoints(int i, bool item1IsFree, bool item2IsFree, ref List<int> outerPoints)
         {
             if (item1IsFree)
@@ -90,10 +72,28 @@ namespace HC_2223_Project
         }
 
         /// <summary>
-        /// 
+        /// Connects the remaining outerpoints from all of the cover testing to the selector vertex
         /// </summary>
-        /// <param name="inputGraph"></param>
-        /// <param name="vertexCoverSize"></param>
+        /// <param name="vertexCoverSize"> Size of the vertex cover. </param>
+        /// <param name="newVertexNumber"> Number of vertex of the output graph. </param>
+        /// <param name="outerPoints"> The List containing all of the unconnected outer points of all of the cover testings. </param>
+        /// <param name="newArcs"> The HashSet containing all of the arcs of the output graph. </param>
+        static private void ConnectSelectors(int vertexCoverSize, int newVertexNumber, List<int> outerPoints, ref HashSet<(int, int)> newArcs)
+        {
+            for (int i = 0; i < outerPoints.Count; i++)
+            {
+                for (int j = 0; j < vertexCoverSize; j++)
+                {
+                    newArcs.Add((outerPoints[i], newVertexNumber - j));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Transforms the input of a Vertex Cover problem into the input of a Hamiltonian Circuit problem
+        /// </summary>
+        /// <param name="inputGraph"> The graph that was going to be tested for vertex cover. </param>
+        /// <param name="vertexCoverSize"> The expected size of the vertex cover. </param>
         /// <returns></returns>
         static public Graph VC2HC(Graph inputGraph, int vertexCoverSize)
         {
