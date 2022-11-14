@@ -10,6 +10,7 @@ namespace HC_2223_Project
             Graph hc = VCToHCConverter.VC2HC(grafo, 3);
             Console.WriteLine(hc.ToString());
             Console.WriteLine();
+            Console.ReadLine();
         }
     }
 }
