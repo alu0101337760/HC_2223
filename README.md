@@ -5,9 +5,9 @@ Authors:
  - Enrique Viña Alonso
  - Juan García Santos
 
-#Introduction
+# Introduction
 
-##Description of the problem
+## Description of the problem
 
 In this report, we will prove the NP-Completeness of the Hamiltonian Circuit problem, to do so, we will find a way to transform the input of another NP-Complete problem (in our case the Vertex Cover problem) into the input of a Hamiltonian Circuit Problem. 
 The procedure used to transform the input must be polynomial and the resulting input for the Hamiltonian Circuit problem must be satisfied if and only if the original input satisfies the Vertex Cover problem.
@@ -19,8 +19,8 @@ We define the class of NP Languages as the languages that represent all of the e
 The class of languages NP-Complete is defined by the following statement: 
 
 A language L is NP-Complete if it satisfies the following conditions:
-- $\[ L \in NP \]$
-- $\[ \forall L' \in NP \quad  \exists L' \propto L \]$
+- $ \[ L \in NP \] $
+- $ \[ \forall L' \in NP \quad  \exists L' \propto L \] $
 
 This means, if the language L is NP-complete, it must belong to the NP class and every other language L' that belongs to the NP class must have a polynomial transformation to L.
 
